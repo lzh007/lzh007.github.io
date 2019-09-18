@@ -19,10 +19,12 @@
     <link rel="dns-prefetch" href="http://yoursite.com">
     <!--SEO-->
 
-<meta name="keywords" content>
+<meta name="keywords" content="Java,SpringBoot">
 
 
-<meta name="description" content="我就想装逼写写">
+<meta name="description" content="需求遇到了这样一个需求，给一个输入框，这个输入款呢可以输入一个店铺名或者手机号码搜索。
+若输入店铺名，则采用模糊搜索，若输入手机号码则精确搜索
+SQL 语句不难，一个参数包含两种可能，用一个 o...">
 
 
 <meta name="robots" content="all">
@@ -33,7 +35,7 @@
 
 <title>
     
-    标签: 工作 |
+    SpringDataJPA之@Query with LIKE(JPA模糊查询) |
     
     薛之豪
 </title>
@@ -129,175 +131,121 @@
     <section class="content-wrap">
         <div class="container">
             <div class="row">
-                <main class="col-md-8 main-content ">
-                    <ol class="breadcrumb">
-    
-    <li>
-        工作
-    </li>
-    
-    
-</ol>
-
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
 <article class="post">
+    <div class="post-head">
+        <h1 id="SpringDataJPA之@Query with LIKE(JPA模糊查询)">
+            
+            SpringDataJPA之@Query with LIKE(JPA模糊查询)
+            
+        </h1>
+        <div class="post-meta">
     
-    <div class="post-content">
-        <div class="post-head home-post-head">
-            <h1 class="post-title">
-                <a href="/2019/09/11/Map 的灵异事件，get 不到值的 Map/">
-                    Map 的灵异事件，get 不到值的 Map</a>
-            </h1>
-            <div class="post-meta"> &bull;
-                <time class="post-date" datetime="" title="">
-                    2019年09月11日
-                </time>
-            </div>
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a class="category-link" href="/categories/笔记/">笔记</a>
+    </span>
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+            <a class="tag-link" href="/tags/Java/">Java</a> <a class="tag-link" href="/tags/SpringBoot/">SpringBoot</a>
+            
+        </span>
+    </span>
+    
+    
+    
+    <span class="fa-wrap">
+        <i class="fa fa-clock-o"></i>
+        <span class="date-meta">
+            2019/09/18</span>
+    </span>
+    
+    <span class="fa-wrap">
+        <i class="fa fa-eye"></i>
+        <span id="busuanzi_value_page_pv"></span>
+    </span>
+    
+    
+</div>
+        
+        
+    </div>
+    
+    <div class="post-body post-content">
+        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>遇到了这样一个需求，给一个输入框，这个输入款呢可以输入一个店铺名或者手机号码搜索。</p>
+<p>若输入店铺名，则采用模糊搜索，若输入手机号码则精确搜索</p>
+<p>SQL 语句不难，一个参数包含两种可能，用一个 or 连接即可</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>可遇到一个骚问题，单独模糊搜索时，有内容输入，加上 or mobile = ？1 后却没有内容，在Navicat测试SQL语句也没啥毛病。</p>
+<p>看了半天额SQL没有头绪，毕竟没写错，于是让大佬帮忙看了一下，他说，看一下控制台的SQL语句打印。</p>
+<p>发现 like 的「%」消失了。我看着其他的SQL语句写没什么问题，于是上网查了一下，用一个 「CONCAT」拼接即可。</p>
+<p>如：like CONCAT （‘%’，？1，’%‘） </p>
+<h3 id="原因-amp-解决"><a href="#原因-amp-解决" class="headerlink" title="原因&amp;解决"></a>原因&amp;解决</h3><p>为什么会这样呢？</p>
+<p>原来，对于JPA来说，like查询是不友好的，像这种 like ‘%？1%’ 很难查出东西的。</p>
+<p>所以 CONCAT函数来帮忙，用  like CONCAT(‘%’,?1,’%’) 进行拼接，核心就是 mysql 的concat 函数，CONCAT（）函数用于将多个字符串连接成一个字符串，是最重要的mysql函数之一</p>
+
+    </div>
+    
+    <div class="reward" ontouchstart>
+    <div class="reward-wrap">赏
+        <div class="reward-box">
+            
+            <span class="reward-type">
+                <img class="alipay" src="/images/alipay.jpg"><b>支付宝打赏</b>
+            </span>
+            
+            
+            <span class="reward-type">
+                <img class="wechat" src="/images/wepay.jpg"><b>微信打赏</b>
+            </span>
+            
         </div>
-        <p class="brief">
+    </div>
+    <p class="reward-tip">
+        叩谢豪恩
+    </p>
+</div>
+    
+    <div class="post-footer">
+        <div>
             
-            都说开发五分钟，bug 两小时，今天还真的遇到了。
-现象一般来说，map 作为一种 key-value 的存储结构，当然我采用 HashMap 方式实现。
-今天遇到一个问题，明明去数据库中用一组 id 去拿数据，然后封装在 map 返...
+            转载声明：
+            商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">薛之豪</a>
             
-        </p>
+            
+        </div>
+        <div>
+            
+        </div>
     </div>
 </article>
-
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+    <a href="/2019/09/11/Map 的灵异事件，get 不到值的 Map/" class="next-post btn btn-default" title='Map 的灵异事件，get 不到值的 Map'>
+        <span class="hidden-lg">下一篇</span>
+        <span class="hidden-xs">
+            Map 的灵异事件，get 不到值的 Map</span><i class="fa fa-angle-right fa-fw"></i>
+    </a>
+    
+</div>
 
                 </main>
                 
-                    
-<aside class="col-md-4 sidebar">
-    
-    
-<div class="widget">
-    <h3 class="title">
-        搜索
-    </h3>
-    <div id="search-form">
-        <div id="result-mask" class="hide"></div>
-        <div class="search-area">
-            
-            <input id="search-key" type="search" autocomplete="off" placeholder="搜点什么呢？">
-            <button type="button" class="search-form-submit" id="search-local">
-                站内搜索</button>
-            
-            
-        </div>
-        <div id="result-wrap" class="hide">
-            <div id="search-result"></div>
-        </div>
-        <div class="hide">
-            <template id="search-tpl">
-                <div class="item">
-                    <a href="/{path}" title="{title}">
-                        <div class="title">{title}</div>
-                        <div class="content">{content}</div>
-                    </a>
-                </div>
-            </template>
-        </div>
-    </div>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        网站公告
-    </h3>
-    <div class="notification">
-        <p>
-    主题下载：<a href="https://github.com/shenliyang/hexo-theme-snippet" title="fork me" target="_blank">Snippet主题</a> <br/>
-    主题使用：<a href="https://github.com/shenliyang/hexo-theme-snippet/blob/master/README.md#常见问题" title="" target="_blank">常见使用问题</a> <br/>
-    支持主题：<a href="https://github.com/shenliyang/hexo-theme-snippet/stargazers">Star一下</a>
-</p>
-    </div>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        社交
-    </h3>
-    <div class="content social">
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">
+            文章目录
+        </h3>
         
-        <a href="//github.com/lzh007" rel="external nofollow" title="Github" target="_blank">
-            <i class="git fa fa-git"></i>
-        </a>
-        
-        <a href="/" rel="external nofollow" title="邮箱" target="_blank">
-            <i class="envelope-o fa fa-envelope-o"></i>
-        </a>
-        
-        <a href="/" rel="external nofollow" title="联系QQ" target="_blank">
-            <i class="qq fa fa-qq"></i>
-        </a>
-        
-        <a href="/" rel="external nofollow" title="微信" target="_blank">
-            <i class="weixin fa fa-weixin"></i>
-        </a>
-        
-        <a href="/" rel="external nofollow" title="QQ群" target="_blank">
-            <i class="users fa fa-users"></i>
-        </a>
-        
-        <a href="/atom.xml" rel="external nofollow" title="RSS" target="_blank">
-            <i class="feed fa fa-feed"></i>
-        </a>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原因-amp-解决"><span class="toc-text">原因&amp;解决</span></a></li></ol>
         
     </div>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        分类
-    </h3>
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/笔记/"><i class="fa" aria-hidden="true">笔记</i></a><span class="category-list-count">2</span></li></ul>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        归档
-    </h3>
-    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/"><i class="fa" aria-hidden="true">2019年09月</i></a><span class="archive-list-count">3</span></li></ul>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        标签云
-    </h3>
-    <div class="content tag-cloud">
-        
-        <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/SpringBoot/" style="font-size: 10px;">SpringBoot</a> <a href="/tags/工作/" style="font-size: 10px;">工作</a>
-        
-    </div>
-</div>
-
-    
-    
-<div class="widget">
-    <h3 class="title">
-        友链
-    </h3>
-    <div class="content friends-link">
-        
-        <a href="https://hexo.io/zh-cn/" class="fa" target="_blank">
-            Hexo官网</a>
-        
-    </div>
-</div>
-
-    
 </aside>
-
                 
             </div>
         </div>
@@ -343,8 +291,6 @@
         </div>
     </div>
 </div>
-
-<script src="/js/search.js?rev=@@hash"></script>
 
 
 
