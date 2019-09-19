@@ -19,12 +19,11 @@
     <link rel="dns-prefetch" href="http://yoursite.com">
     <!--SEO-->
 
-<meta name="keywords" content="Java,SpringBoot">
+<meta name="keywords" content="工作,Java">
 
 
-<meta name="description" content="需求遇到了这样一个需求，给一个输入框，这个输入款呢可以输入一个店铺名或者手机号码搜索。
-若输入店铺名，则采用模糊搜索，若输入手机号码则精确搜索
-SQL 语句不难，一个参数包含两种可能，用一个 o...">
+<meta name="description" content="问题：
+123456Could not write JSON: (was java.lang.NullPointerException); nested exception is com.fas...">
 
 
 <meta name="robots" content="all">
@@ -35,7 +34,7 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
 
 <title>
     
-    SpringDataJPA之@Query with LIKE(JPA模糊查询) |
+    Could not write JSON:(was java.lang.NullPointerException) |
     
     薛之豪
 </title>
@@ -135,9 +134,9 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
                     <p id="process"></p>
 <article class="post">
     <div class="post-head">
-        <h1 id="SpringDataJPA之@Query with LIKE(JPA模糊查询)">
+        <h1 id="Could not write JSON:(was java.lang.NullPointerException)">
             
-            SpringDataJPA之@Query with LIKE(JPA模糊查询)
+            Could not write JSON:(was java.lang.NullPointerException)
             
         </h1>
         <div class="post-meta">
@@ -152,7 +151,7 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
         <i class="fa fa-tags"></i>
         <span class="tags-meta">
             
-            <a class="tag-link" href="/tags/Java/">Java</a> <a class="tag-link" href="/tags/SpringBoot/">SpringBoot</a>
+            <a class="tag-link" href="/tags/Java/">Java</a> <a class="tag-link" href="/tags/工作/">工作</a>
             
         </span>
     </span>
@@ -162,7 +161,7 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
     <span class="fa-wrap">
         <i class="fa fa-clock-o"></i>
         <span class="date-meta">
-            2019/09/18</span>
+            2019/09/19</span>
     </span>
     
     <span class="fa-wrap">
@@ -177,16 +176,32 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
     </div>
     
     <div class="post-body post-content">
-        <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>遇到了这样一个需求，给一个输入框，这个输入款呢可以输入一个店铺名或者手机号码搜索。</p>
-<p>若输入店铺名，则采用模糊搜索，若输入手机号码则精确搜索</p>
-<p>SQL 语句不难，一个参数包含两种可能，用一个 or 连接即可</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>可遇到一个骚问题，单独模糊搜索时，有内容输入，加上 or mobile = ？1 后却没有内容，在Navicat测试SQL语句也没啥毛病。</p>
-<p>看了半天额SQL没有头绪，毕竟没写错，于是让大佬帮忙看了一下，他说，看一下控制台的SQL语句打印。</p>
-<p>发现 like 的「%」消失了。我看着其他的SQL语句写没什么问题，于是上网查了一下，用一个 「CONCAT」拼接即可。</p>
-<p>如：like CONCAT （‘%’，？1，’%‘） </p>
-<h3 id="原因-amp-解决"><a href="#原因-amp-解决" class="headerlink" title="原因&amp;解决"></a>原因&amp;解决</h3><p>为什么会这样呢？</p>
-<p>原来，对于JPA来说，like查询是不友好的，像这种 like ‘%？1%’ 很难查出东西的。</p>
-<p>所以 CONCAT函数来帮忙，用  like CONCAT(‘%’,?1,’%’) 进行拼接，核心就是 mysql 的concat 函数，CONCAT（）函数用于将多个字符串连接成一个字符串，是最重要的mysql函数之一</p>
+        <p>问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Could not write JSON: (was java.lang.NullPointerException); </span><br><span class="line">nested exception is com.fasterxml.jackson.databind.JsonMappingException: (was java.lang.NullPointerException) </span><br><span class="line">(through reference chain: com.x.x.x.utils.Result[\&quot;data\&quot;]-&gt;</span><br><span class="line">org.springframework.data.domain.PageImpl[\&quot;content\&quot;]-&gt;</span><br><span class="line">java.util.Collections$UnmodifiableRandomAccessList[13]-&gt;</span><br><span class="line">com.X.X.X.X.M[\&quot;totalPrice\&quot;])&quot;</span><br></pre></td></tr></table></figure>
+
+<p>遇到了一个莫名其妙的 bug ，日志也没报错，就返回这句话，直接复制粘 谷歌一波！！！</p>
+<p>网上有人表示：</p>
+<p>原因一：</p>
+<p>每个实体类的属性的数据类型可能用了基本类型，也可能用了包装类型。</p>
+<p>可能在处理业务的时候 null 值的处理方式，我们直接修改 bean 的字段类型为包装类，但是又没有把setter/getter方法重新生成。</p>
+<p>就比如我的一个字段类型仅仅把属性的基本类型（如 double ）改为包装类型（如 Double ），而并没有将setter/getter的类型一起修改。</p>
+<p>所以 com.fasterxml.jackson 将 Entity 序列化为 Json 字符串时出现上述疏忽报的错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private Double receiveDis;</span><br><span class="line"></span><br><span class="line">public double getReceiveDis() &#123;</span><br><span class="line">return receiveDis;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void setReceiveDis(double receiveDis) &#123;</span><br><span class="line">this.receiveDis = receiveDis;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>————————————————<br>版权声明：本文为CSDN博主「实例化」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/pengdingxu10/article/details/78582049" target="_blank" rel="noopener">https://blog.csdn.net/pengdingxu10/article/details/78582049</a></p>
+<p>原因二：</p>
+<p>可能我的 bug ，比较奇葩不符合上述情况，于是看了看了报错的字段的属性和 get/set 方法。</p>
+<p>因为我的字段是 totalPrice ,那么我就去找它的 get / set 方法。</p>
+<p>有趣的地方来了。</p>
+<p>原来 get 方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public Long getTotalPrice() &#123;</span><br><span class="line">   return aPrice + bPrice + cPrice;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而 aPrice、bPrice 、 cPrice 都是包装类 Long ，若遇到 null 情况，那么 null + null 就会报空指针错误。</p>
+<p>好吧，又翻车了….于是我改进了方法</p>
+<p>改进 get</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public Long getTotalPrice() &#123;</span><br><span class="line">    totalPrice = 0L;</span><br><span class="line">   if (aPrice != null)&#123;</span><br><span class="line">      totalPrice += aPrice ;</span><br><span class="line">   &#125;</span><br><span class="line">   if (bPrice != null)&#123;</span><br><span class="line">      totalPrice += bPrice ;</span><br><span class="line">   &#125;</span><br><span class="line">   if (cPrice!= null)&#123;</span><br><span class="line">      totalPrice += cPrice;</span><br><span class="line">   &#125;</span><br><span class="line">   return totalPrice;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结：面向 BUG 开发！！！</p>
 
     </div>
     
@@ -225,17 +240,11 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
 </article>
 <div class="article-nav prev-next-wrap clearfix">
     
-    <a href="/2019/09/19/Could not write JSON(was java.lang.NullPointerException)/" class="pre-post btn btn-default" title='Could not write JSON:(was java.lang.NullPointerException)'>
-        <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
-        <span class="hidden-xs">
-            Could not write JSON:(was java.lang.NullPointerException)</span>
-    </a>
     
-    
-    <a href="/2019/09/11/Map 的灵异事件，get 不到值的 Map/" class="next-post btn btn-default" title='Map 的灵异事件，get 不到值的 Map'>
+    <a href="/2019/09/18/SpringDataJPA之@Query with LIKE(JPA模糊查询)/" class="next-post btn btn-default" title='SpringDataJPA之@Query with LIKE(JPA模糊查询)'>
         <span class="hidden-lg">下一篇</span>
         <span class="hidden-xs">
-            Map 的灵异事件，get 不到值的 Map</span><i class="fa fa-angle-right fa-fw"></i>
+            SpringDataJPA之@Query with LIKE(JPA模糊查询)</span><i class="fa fa-angle-right fa-fw"></i>
     </a>
     
 </div>
@@ -248,7 +257,7 @@ SQL 语句不难，一个参数包含两种可能，用一个 o...">
             文章目录
         </h3>
         
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求"><span class="toc-text">需求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原因-amp-解决"><span class="toc-text">原因&amp;解决</span></a></li></ol>
+        <p>暂无目录</p>
         
     </div>
 </aside>
